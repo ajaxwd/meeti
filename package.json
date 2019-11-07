@@ -1,0 +1,23 @@
+{
+  "name": "meeti",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon ./index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.19.4"
+  },
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "dotenv": "^8.2.0",
+    "ejs": "^2.7.1",
+    "express": "^4.17.1",
+    "express-ejs-layouts": "^2.5.0",
+    "pg": "^7.12.1",
+    "sequelize": "^5.21.2"
+  }
+}
