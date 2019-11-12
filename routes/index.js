@@ -7,7 +7,8 @@ const usuariosControllers = require('../controllers/usuariosControllers');
 module.exports = function() {
     router.get('/', homeControllers.home);
 
-    router.get('crear-cuenta', usuariosControllers.formCrearCuenta);
+    router.get('/crear-cuenta', usuariosControllers.formCrearCuenta);
+    router.post('/crear-cuenta', usuariosControllers.crearNuevaCuenta);
 
     return router;
 }
