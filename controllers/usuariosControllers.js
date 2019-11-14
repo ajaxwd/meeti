@@ -1,4 +1,5 @@
 const Usuarios = require('../models/Usuarios');
+const enviarEmail = require('../handlers/emails');
 
 exports.formCrearCuenta = (req, res) => {
     res.render('/crear-cuenta', {
@@ -20,6 +21,16 @@ exports.crearNuevaCuenta = async (req, res) => {
     try {
       await Usuarios.create(usuario);
 
+      // Url de confirmación
+      const url = `http://${req.headers.host}/confirmar-cuenta/${usuario.email}`;
+
+        // Enviar email de confirmación
+        await enviarEmail.enviarEmail({
+          usuario,
+          url, 
+          subject : 'Confirma tu cuenta de Meeti',
+          archivo : 'confirmar-cuenta'
+      });
 
       //Flash Message y redireccionar
       req.flash('exito', 'Hemos enviado un E-mail, confirma tu cuenta');
@@ -47,4 +58,26 @@ exports.formIniciarSesion = (req, res) => {
   res.render('iniciar-sesion', {
       nombrePagina : 'Iniciar Sesión'
   })
+}
+
+// Confirma la suscripción del usuario
+exports.confirmarCuenta = async (req, res, next) => {
+  // verificar que el usuario existe
+  const usuario = await Usuarios.findOne({ where : { email: req.params.correo }});
+
+  // sino existe, redireccionar
+  if(!usuario) {
+      req.flash('error', 'No existe esa cuenta');
+      res.redirect('/crear-cuenta');
+      return next();
+  }
+
+  // si existe, confirmar suscripción y redireccionar
+  usuario.activo = 1;
+  await usuario.save();
+
+  req.flash('exito', 'La cuenta se ha confirmado, ya puedes iniciar sesión');
+  res.redirect('/iniciar-sesion');
+
+
 }
